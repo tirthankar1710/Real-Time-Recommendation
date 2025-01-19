@@ -1,3 +1,7 @@
 reccvenv
 data/meta_Video_Games.jsonl
 data/Video_Games.jsonl
+logs
+artifacts
+cosine_scores.npy
+svd_model_a.pkl
