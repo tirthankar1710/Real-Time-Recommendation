@@ -23,3 +23,12 @@ class DataTransformationConfig:
     user_df_number: dict
     data_validation_status: Path
     output_path_df:Path
+
+@dataclass
+class ModelTrainerConfig:
+    root_dir: Path
+    input_data: Path
+    model_name: str
+    cosine_sim: str
+    indices_name: str
+    content_df_path: Path

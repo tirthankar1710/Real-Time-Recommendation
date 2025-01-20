@@ -18,3 +18,11 @@ data_transformation:
   user_df_number: 2000
   data_validation_status: artifacts/data_validation/status.json
   output_path_df: artifacts/data_transformation/merged_data_weight.csv
+
+model_trainer:
+  root_dir: artifacts/model_trainer
+  input_data: artifacts/data_transformation/merged_data_weight.csv
+  model_name: colab_filter_model.pkl
+  cosine_sim: cosine_scores.npy
+  indices_name: indices.pkl
+  content_df_path: artifacts/model_trainer/content_df.csv
