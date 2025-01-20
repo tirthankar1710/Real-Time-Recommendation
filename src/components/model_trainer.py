@@ -18,14 +18,14 @@ class ModelTrainer:
     def get_cosine_similarity(self, df):
         selected_columns = ['user_id','parent_asin','main_category','title_y','features','description']
         content_df = df[selected_columns]
-        content_df['item_description'] = content_df['main_category'] + " " + content_df['title_y'] + " " + content_df['features'] + " " + content_df['description']
-        content_df = content_df.drop_duplicates(subset=['parent_asin'], keep='first')
-        
-        logger.info(f"shape of content df: {content_df.shape}")
-        
-        # TODO: Why are we having nan values at all? That should not be the case
-        # content_df["item_description"] = content_df["item_description"].fillna("").astype(str)
-        content_df = content_df.dropna(subset=['item_description'])
+        # content_df['item_description'] = content_df['main_category'] + " " + content_df['title_y'] + " " + content_df['features'] + " " + content_df['description']
+        content_df['item_description'] = (
+            content_df['main_category'].fillna('') + " " +
+            content_df['title_y'].fillna('') + " " +
+            content_df['features'].fillna('') + " " +
+            content_df['description'].fillna('')
+        )
+        content_df = content_df.drop_duplicates(subset=['parent_asin'], keep='first') 
         tf = TfidfVectorizer(analyzer='word',ngram_range=(1, 2),min_df=0.5, stop_words='english')
         logger.info(f"shape of content df: {content_df.shape}")
 
