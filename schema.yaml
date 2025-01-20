@@ -1,1 +1,6 @@
-test: test
+COLUMNS:
+  item: 14
+  user: 10
+
+TARGET_COLUMNS:
+  name: rating

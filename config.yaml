@@ -1,6 +1,0 @@
-artifacts_root: artifacts
-
-data_ingestion:
-  root_dir: artifacts/data_ingestion
-  video_games_item: artifacts/data_ingestion/meta_Video_Games.jsonl
-  video_games_user: artifacts/data_ingestion/Video_Games.jsonl
