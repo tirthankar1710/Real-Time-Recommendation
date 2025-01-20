@@ -60,7 +60,7 @@ class ConfigurationManager:
         model_trainer_config = ModelTrainerConfig(
             root_dir = config.root_dir,
             input_data  = config.input_data,
-            model_name = config.model_name,
+            model_path = config.model_path,
             cosine_sim = config.cosine_sim,
             indices_name = config.indices_name,
             content_df_path = config.content_df_path

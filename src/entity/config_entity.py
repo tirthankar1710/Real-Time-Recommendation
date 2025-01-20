@@ -28,7 +28,7 @@ class DataTransformationConfig:
 class ModelTrainerConfig:
     root_dir: Path
     input_data: Path
-    model_name: str
+    model_path: Path
     cosine_sim: str
     indices_name: str
     content_df_path: Path

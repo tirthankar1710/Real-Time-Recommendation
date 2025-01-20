@@ -22,7 +22,7 @@ data_transformation:
 model_trainer:
   root_dir: artifacts/model_trainer
   input_data: artifacts/data_transformation/merged_data_weight.csv
-  model_name: colab_filter_model.pkl
+  model_path: artifacts/model_trainer/colab_filter_model.pkl
   cosine_sim: cosine_scores.npy
   indices_name: indices.pkl
   content_df_path: artifacts/model_trainer/content_df.csv
