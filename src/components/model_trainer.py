@@ -9,12 +9,22 @@ from surprise import dump
 from src import logger
 from src.entity.config_entity import ModelTrainerConfig
 
+from sklearn.preprocessing import LabelEncoder
+
+
 class ModelTrainer:
     def __init__(self, config: ModelTrainerConfig):
         self.config = config
     
     def model_trainer_flow(self):
         merged_df_weight = pd.read_csv(self.config.input_data)
+        
+        # Initialize LabelEncoder
+        le_id = LabelEncoder()
+        le_prod = LabelEncoder()
+        merged_df_weight['parent_asin']= le_id.fit_transform(merged_df_weight['parent_asin'])
+        merged_df_weight['user_id'] = le_prod.fit_transform(merged_df_weight['user_id'])
+
         self.get_cosine_similarity(df=merged_df_weight)
         self.get_svd_model(df=merged_df_weight)
 

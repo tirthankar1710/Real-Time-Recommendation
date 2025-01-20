@@ -26,3 +26,9 @@ model_trainer:
   cosine_sim: cosine_scores.npy
   indices_name: indices.pkl
   content_df_path: artifacts/model_trainer/content_df.csv
+
+prediction:
+  colab_model_path: artifacts/model_trainer/colab_filter_model.pkl
+  cosine_sim_path: artifacts/model_trainer/cosine_scores.npy
+  indices_path: artifacts/model_trainer/indices.pkl
+  content_df_path: artifacts/model_trainer/content_df.csv

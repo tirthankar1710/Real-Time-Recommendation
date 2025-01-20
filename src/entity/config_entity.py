@@ -32,3 +32,10 @@ class ModelTrainerConfig:
     cosine_sim: str
     indices_name: str
     content_df_path: Path
+
+@dataclass
+class PredictionConfig:
+    colab_model_path: Path
+    cosine_sim_path: Path
+    indices_path: Path
+    content_df_path: Path

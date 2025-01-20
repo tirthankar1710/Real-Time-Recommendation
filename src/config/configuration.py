@@ -1,6 +1,6 @@
 from src.constants import CONFIG_FILE_PATH, PARAMS_FILE_PATH, SCHEMA_FILE_PATH
 from src.utils.common import read_yaml, create_directories
-from src.entity.config_entity import DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig
+from src.entity.config_entity import DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig, PredictionConfig
 
 class ConfigurationManager:
     def __init__(self,
@@ -67,3 +67,15 @@ class ConfigurationManager:
         )
 
         return model_trainer_config
+    
+    def get_prediction_config(self) -> PredictionConfig:
+        config = self.config.prediction
+
+        prediction_config = PredictionConfig(
+                colab_model_path=  config.colab_model_path,
+                cosine_sim_path = config.cosine_sim_path,
+                indices_path = config.indices_path,
+                content_df_path = config.content_df_path
+        )
+
+        return prediction_config
