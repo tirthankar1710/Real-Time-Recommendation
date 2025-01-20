@@ -21,3 +21,10 @@ try:
 except Exception as e:
         logger.exception(e)
         raise e
+
+STAGE_NAME = "Data Transformation Stage"
+try:
+      pass
+except Exception as e:
+        logger.exception(e)
+        raise e

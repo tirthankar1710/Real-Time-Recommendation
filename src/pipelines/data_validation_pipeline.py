@@ -12,4 +12,6 @@ class DataValidationTrainingPipeline:
         config = ConfigurationManager()
         data_validation_config = config.get_data_validation_config()
         data_validation = DataValidation(config=data_validation_config)
-        data_validation.validation_rules()
+        validation_status = data_validation.validation_rules()
+
+        return validation_status
