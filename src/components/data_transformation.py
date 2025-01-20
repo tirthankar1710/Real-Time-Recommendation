@@ -24,6 +24,8 @@ class DataTransformation:
         user_chunks_list= list(user_chunks)
         # use the first x dataframes as configured in the user df number.
         user_df = pd.concat(user_chunks_list[:self.config.user_df_number], ignore_index=True)
+        user_df.drop(columns=['images', 'timestamp', 'helpful_vote', 'verified_purchase','asin'], inplace=True)
+        
         return user_df
 
     def get_item_information(self):
@@ -32,6 +34,8 @@ class DataTransformation:
         item_chunks_list= list(item_chunks)
         # use the first x dataframes as configured in the user df number.
         item_df = pd.concat(item_chunks_list, ignore_index=True)
+        item_df.drop(columns=['images', 'videos', 'store','bought_together','subtitle', 'author','details','price'], inplace=True)
+
         return item_df
     
     def prepare_merged_df(self, user_df, item_df):
@@ -39,6 +43,7 @@ class DataTransformation:
         merged_df = pd.merge(user_df, item_df, on='parent_asin', how='inner')
         categories_to_keep = ['Video Games', 'Computers', 'All Electronics']
         merged_df = merged_df[merged_df['main_category'].isin(categories_to_keep)]
+
         # Converting them from list of strings to one string.
         merged_df['features'] = merged_df['features'].apply(lambda x: " ".join(x))
         merged_df['description'] = merged_df['description'].apply(lambda x: " ".join(x))

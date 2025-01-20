@@ -26,8 +26,8 @@ except Exception as e:
 STAGE_NAME = "Data Transformation Stage"
 try:
    logger.info(f">>>>>> stage: {STAGE_NAME} started <<<<<<") 
-   data_transfomrmation = DataTransformationTrainingPipeline()
-   data_transfomrmation.initiate_data_transformation()
+   data_transformation = DataTransformationTrainingPipeline()
+   data_transformation.initiate_data_transformation()
    logger.info(f">>>>>> stage: {STAGE_NAME} completed <<<<<<\n\nx==========x")
 except Exception as e:
         logger.exception(e)
