@@ -27,11 +27,6 @@ class PredictionPipeline:
         product_indices = [i[0] for i in sim_scores]
         products = self.content_df.iloc[product_indices][['title_y', 'parent_asin']]
         products['estimate'] = 0
-        # for index, row in products.iterrows():
-        #     product = row['parent_asin']
-        #     estimate = self.model.predict(uid=user_id, iid=product).est
-        #     products.at[index, 'estimate'] = estimate
-        # products = products.sort_values('estimate', ascending=False)
         def estimate_product(row):
             product = row['parent_asin']
             row['estimate'] = self.model.predict(uid=user_id, iid=product).est

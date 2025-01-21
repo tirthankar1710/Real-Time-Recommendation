@@ -49,7 +49,7 @@ with st.container(border=True):
             st.write(f"**{product['name']}** (ID: {product['id']})")
             feedback = st.feedback("stars", key={f"counter_{counter}"})
             # print("******")
-            print(f"counter: {product['name']}, feedback: {feedback+1}")
+            # print(f"counter: {product['name']}, feedback: {feedback+1}")
             # st.write("---")
     with col2:
         st.subheader("Would you buy this product?")
