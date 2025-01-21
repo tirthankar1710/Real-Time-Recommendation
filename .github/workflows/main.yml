@@ -29,6 +29,14 @@ jobs:
     name: Continuous Delivery
     needs: integration
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        stage:
+          - { dockerfile: "Dockerfile.ingestion", image: "data-ingestion-image" }
+          - { dockerfile: "Dockerfile.transformation", image: "data-transformation-image" }
+          - { dockerfile: "Dockerfile.validation", image: "data-validation-image" }
+          - { dockerfile: "Dockerfile.trainer", image: "model-trainer-image" }
+          - { dockerfile: "Dockerfile.prediction", image: "prediction-image" }
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -56,9 +64,6 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
           IMAGE_TAG: latest
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          IMAGE_URI=$ECR_REGISTRY/${{ matrix.stage.image }}:$IMAGE_TAG
+          docker build -f ${{ matrix.stage.dockerfile }} -t $IMAGE_URI .
+          docker push $IMAGE_URI
