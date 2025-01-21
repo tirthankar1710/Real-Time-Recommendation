@@ -36,7 +36,7 @@ jobs:
           - { dockerfile: "Dockerfile.transformation", image: "data-transformation-image" }
           - { dockerfile: "Dockerfile.validation", image: "data-validation-image" }
           - { dockerfile: "Dockerfile.trainer", image: "model-trainer-image" }
-          - { dockerfile: "Dockerfile.prediction", image: "prediction-image" }
+          # - { dockerfile: "Dockerfile.prediction", image: "prediction-image" }
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
