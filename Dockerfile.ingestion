@@ -1,0 +1,24 @@
+# Dockerfile.transformation
+FROM python:3.12-slim
+
+WORKDIR /src
+
+# Copy the requirements.txt file into the container
+COPY requirements.txt .
+
+# Install the dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy shared modules
+COPY src/config /src/config
+COPY src/constants /src/constants
+COPY src/utils /src/utils
+COPY src/static /src/static
+COPY src/entity /src/entity
+
+# Copy pipeline and its required component
+COPY src/pipelines/data_ingestion_pipeline.py /src/pipelines/
+COPY src/components/data_ingestion.py /src/components/
+
+# Set the entry point for the pipeline
+CMD ["python", "pipelines/data_ingestion_pipeline.py"]

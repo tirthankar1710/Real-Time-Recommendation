@@ -1,14 +1,29 @@
 import json
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from src.config.configuration import ConfigurationManager
 from src.components.data_transformation import DataTransformation
 from src import logger
 
+STAGE_NAME = "transformation_stage"
+
 class DataTransformationTrainingPipeline:
     def __init__(self):
+        """
+        Constructor for the DataTransformationTrainingPipeline class.
+        Initializes any required attributes.
+        """
         pass 
 
     def initiate_data_transformation(self):
+        """
+        Method to initiate the data transformation process.
+        This method creates a ConfigurationManager instance, retrieves the data transformation configuration,
+        checks the data validation status, and if validation is successful, it creates a DataTransformation instance
+        and starts the data transformation flow. If validation fails, it logs an error and raises a ValueError.
+        """
         try:
             config = ConfigurationManager()
             data_transformation_config = config.get_data_transformation_config()
@@ -25,3 +40,13 @@ class DataTransformationTrainingPipeline:
         except Exception as e:
             logger.exception(e)
             raise e
+
+if __name__ == '__main__':
+    try:
+        logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
+        obj = DataTransformationTrainingPipeline()
+        obj.initiate_data_transformation()
+        logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
+    except Exception as e:
+        logger.exception(e)
+        raise e

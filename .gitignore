@@ -1,4 +1,4 @@
-reccvenv
+reccovenv
 logs
 artifacts/data_ingestion
 artifacts/data_transformation
@@ -6,6 +6,7 @@ artifacts/data_validation
 artifacts/model_trainer
 cosine_scores.npy
 svd_model_a.pkl
+.env
 
 test.py
 artifacts/

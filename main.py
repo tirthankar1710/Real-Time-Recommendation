@@ -1,45 +1,56 @@
+import sys
 from src import logger
 from src.pipelines.data_ingestion_pipeline import DataIngestionTrainingPipeline
 from src.pipelines.data_validation_pipeline import DataValidationTrainingPipeline
 from src.pipelines.data_transformation_pipeline import DataTransformationTrainingPipeline
 from src.pipelines.model_trainer_pipeline import ModelTrainerTrainingPipeline
 
-STAGE_NAME = "Data Ingestion Stage"
-try:
-   logger.info(f">>>>>> stage: {STAGE_NAME} started <<<<<<") 
-   data_ingestion = DataIngestionTrainingPipeline()
-   data_ingestion.initiate_data_ingestion()
-   logger.info(f">>>>>> stage: {STAGE_NAME} completed <<<<<<\n\nx==========x")
-except Exception as e:
-        logger.exception(e)
-        raise e
+def run_stage(stage_name):
+    if stage_name == "ingestion_stage":
+        try:
+            logger.info(f">>>>>> stage: {stage_name} started <<<<<<") 
+            data_ingestion = DataIngestionTrainingPipeline()
+            data_ingestion.initiate_data_ingestion()
+            logger.info(f">>>>>> stage: {stage_name} completed <<<<<<\n\nx==========x")
+        except Exception as e:
+            logger.exception(e)
+            raise e
 
-STAGE_NAME = "Data Validation Stage"
-try:
-   logger.info(f">>>>>> stage: {STAGE_NAME} started <<<<<<") 
-   data_validation = DataValidationTrainingPipeline()
-   data_validation.initiate_data_validation()
-   logger.info(f">>>>>> stage: {STAGE_NAME} completed <<<<<<\n\nx==========x")
-except Exception as e:
-        logger.exception(e)
-        raise e
+    elif stage_name == "validation_stage":
+        try:
+            logger.info(f">>>>>> stage: {stage_name} started <<<<<<") 
+            data_validation = DataValidationTrainingPipeline()
+            data_validation.initiate_data_validation()
+            logger.info(f">>>>>> stage: {stage_name} completed <<<<<<\n\nx==========x")
+        except Exception as e:
+            logger.exception(e)
+            raise e
 
-STAGE_NAME = "Data Transformation Stage"
-try:
-   logger.info(f">>>>>> stage: {STAGE_NAME} started <<<<<<") 
-   data_transformation = DataTransformationTrainingPipeline()
-   data_transformation.initiate_data_transformation()
-   logger.info(f">>>>>> stage: {STAGE_NAME} completed <<<<<<\n\nx==========x")
-except Exception as e:
-        logger.exception(e)
-        raise e
+    elif stage_name == "transformation_stage":
+        try:
+            logger.info(f">>>>>> stage: {stage_name} started <<<<<<") 
+            data_transformation = DataTransformationTrainingPipeline()
+            data_transformation.initiate_data_transformation()
+            logger.info(f">>>>>> stage: {stage_name} completed <<<<<<\n\nx==========x")
+        except Exception as e:
+            logger.exception(e)
+            raise e
 
-STAGE_NAME = "Model Training Stage"
-try:
-   logger.info(f">>>>>> stage: {STAGE_NAME} started <<<<<<") 
-   model_trainer = ModelTrainerTrainingPipeline()
-   model_trainer.initiate_model_training()
-   logger.info(f">>>>>> stage: {STAGE_NAME} completed <<<<<<\n\nx==========x")
-except Exception as e:
-        logger.exception(e)
-        raise e
+    elif stage_name == "training_stage":
+        try:
+            logger.info(f">>>>>> stage: {stage_name} started <<<<<<") 
+            model_trainer = ModelTrainerTrainingPipeline()
+            model_trainer.initiate_model_training()
+            logger.info(f">>>>>> stage: {stage_name} completed <<<<<<\n\nx==========x")
+        except Exception as e:
+            logger.exception(e)
+            raise e
+
+if __name__ == "__main__":
+    stage = sys.argv[1]
+    if stage == "all":
+        stages = ["ingestion_stage", "validation_stage", "transformation_stage", "training_stage"]
+        for stage_name in stages:
+            run_stage(stage_name)
+    else:
+        run_stage(stage)

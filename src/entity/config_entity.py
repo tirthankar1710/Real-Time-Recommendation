@@ -6,6 +6,9 @@ class DataIngestionConfig:
     root_dir: Path
     video_games_item: Path
     video_games_user: Path
+    user_df_number: dict
+    user_df_output_path: Path
+    item_df_output_path: Path
 
 @dataclass
 class DataValidationConfig:
@@ -20,7 +23,6 @@ class DataTransformationConfig:
     root_dir: Path
     video_games_item: Path
     video_games_user: Path
-    user_df_number: dict
     data_validation_status: Path
     output_path_df:Path
 

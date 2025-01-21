@@ -20,7 +20,10 @@ class ConfigurationManager:
         data_ingestion_config=DataIngestionConfig(
             root_dir=config.root_dir,
             video_games_item=config.video_games_item,
-            video_games_user=config.video_games_user
+            video_games_user=config.video_games_user,
+            user_df_number=config.user_df_number,
+            user_df_output_path=config.user_df_output_path,
+            item_df_output_path=config.item_df_output_path
         )
         return data_ingestion_config
     
@@ -47,7 +50,6 @@ class ConfigurationManager:
             video_games_item = config.video_games_item,
             video_games_user = config.video_games_user,
             output_path_df=config.output_path_df,
-            user_df_number=config.user_df_number,
             data_validation_status=config.data_validation_status
         )
 
