@@ -7,3 +7,5 @@ scikit-surprise
 ensure
 python-box
 pyyaml
+fastapi
+uvicorn[standard]
