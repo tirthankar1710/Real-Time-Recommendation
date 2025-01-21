@@ -1,0 +1,34 @@
+artifacts_root: artifacts
+
+data_ingestion:
+  root_dir: artifacts/data_ingestion
+  video_games_item: artifacts/data_ingestion/meta_Video_Games.jsonl
+  video_games_user: artifacts/data_ingestion/Video_Games.jsonl
+
+data_validation:
+  root_dir: artifacts/data_validation
+  video_games_item: artifacts/data_ingestion/meta_Video_Games.jsonl
+  video_games_user: artifacts/data_ingestion/Video_Games.jsonl
+  output: artifacts/data_validation/status.json
+
+data_transformation:
+  root_dir: artifacts/data_transformation
+  video_games_item: artifacts/data_ingestion/meta_Video_Games.jsonl
+  video_games_user: artifacts/data_ingestion/Video_Games.jsonl
+  user_df_number: 2000
+  data_validation_status: artifacts/data_validation/status.json
+  output_path_df: artifacts/data_transformation/merged_data_weight.csv
+
+model_trainer:
+  root_dir: artifacts/model_trainer
+  input_data: artifacts/data_transformation/merged_data_weight.csv
+  model_path: artifacts/model_trainer/colab_filter_model.pkl
+  cosine_sim: cosine_scores.npy
+  indices_name: indices.pkl
+  content_df_path: artifacts/model_trainer/content_df.csv
+
+prediction:
+  colab_model_path: artifacts/model_trainer/colab_filter_model.pkl
+  cosine_sim_path: artifacts/model_trainer/cosine_scores.npy
+  indices_path: artifacts/model_trainer/indices.pkl
+  content_df_path: artifacts/model_trainer/content_df.csv
