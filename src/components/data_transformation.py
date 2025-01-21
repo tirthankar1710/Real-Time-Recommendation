@@ -8,8 +8,8 @@ class DataTransformation:
         self.config = config
     
     def data_transformation_flow(self):
-        user_df = self.get_user_information()
-        item_df = self.get_item_information()
+        user_df = pd.read_csv(self.config.video_games_user)
+        item_df = pd.read_csv(self.config.video_games_item)
         merged_df_weight = self.prepare_merged_df(user_df=user_df, item_df=item_df)
         logger.info(f"shape of merged_df_weight: {merged_df_weight.shape}")
 
@@ -17,27 +17,7 @@ class DataTransformation:
         
         return merged_df_weight
 
-
-    def get_user_information(self):
-        chunk_size=500
-        user_chunks = pd.read_json(self.config.video_games_user, lines=True, chunksize=chunk_size)
-        user_chunks_list= list(user_chunks)
-        # use the first x dataframes as configured in the user df number.
-        user_df = pd.concat(user_chunks_list[:self.config.user_df_number], ignore_index=True)
-        user_df.drop(columns=['images', 'timestamp', 'helpful_vote', 'verified_purchase','asin'], inplace=True)
-        
-        return user_df
-
-    def get_item_information(self):
-        chunk_size=500
-        item_chunks = pd.read_json(self.config.video_games_item, lines=True, chunksize=chunk_size)
-        item_chunks_list= list(item_chunks)
-        # use the first x dataframes as configured in the user df number.
-        item_df = pd.concat(item_chunks_list, ignore_index=True)
-        item_df.drop(columns=['images', 'videos', 'store','bought_together','subtitle', 'author','details','price'], inplace=True)
-
-        return item_df
-    
+   
     def prepare_merged_df(self, user_df, item_df):
         # Merging the two columns on the product id
         merged_df = pd.merge(user_df, item_df, on='parent_asin', how='inner')
