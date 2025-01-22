@@ -3,6 +3,9 @@ FROM public.ecr.aws/lambda/python:3.12
 
 WORKDIR /src
 
+# Install system dependencies
+RUN yum -y install gcc gcc-c++ python3-devel
+
 # Copy the requirements.txt file into the container
 COPY requirements.txt .
 
