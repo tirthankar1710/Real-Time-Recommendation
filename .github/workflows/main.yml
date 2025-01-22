@@ -107,7 +107,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
-          IMAGE_URI=$ECR_REGISTRY//${{ matrix.stage.image }}:$IMAGE_TAG
+          IMAGE_URI=$ECR_REGISTRY/${{ matrix.stage.image }}:$IMAGE_TAG
           aws lambda update-function-code \
             --function-name ${{ matrix.stage.lambda }} \
             --image-uri $IMAGE_URI
