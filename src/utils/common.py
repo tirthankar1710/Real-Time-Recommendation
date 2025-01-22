@@ -45,3 +45,6 @@ def create_directories(path_to_directories: list, verbose=True):
         os.makedirs(path, exist_ok=True)
         if verbose:
             logger.info(f"created directory at: {path}")
+
+def upload_to_s3(job_id, stage, object):
+    pass
