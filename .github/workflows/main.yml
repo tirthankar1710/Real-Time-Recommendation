@@ -66,17 +66,6 @@ jobs:
           IMAGE_URI=$ECR_REGISTRY/${{ matrix.stage.image }}:$IMAGE_TAG
           docker build -f ${{ matrix.stage.dockerfile }} -t $IMAGE_URI .
           docker push $IMAGE_URI
-
-      - name: Update Lambda Function
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: |
-          IMAGE_URI=$ECR_REGISTRY//${{ matrix.stage.image }}:$IMAGE_TAG
-          aws lambda update-function-code \
-            --function-name ${{ matrix.stage.lambda }} \
-            --image-uri $IMAGE_URI
     
   update-lambda-functions:
     name: Continuous Deployment
