@@ -6,7 +6,7 @@ from src import logger
 from src.config.configuration import ConfigurationManager
 from src.components.data_validation import DataValidation
 
-STAGE_NAME = "Data Validation stage"
+STAGE_NAME = "data_validation"
 
 class DataValidationTrainingPipeline:
     def __init__(self):
@@ -30,12 +30,47 @@ class DataValidationTrainingPipeline:
 
         return validation_status
 
-if __name__ == '__main__':
+def lambda_handler(event, context):
+    """
+    AWS Lambda handler function.
+    Extracts the job ID from the event and initiates the data ingestion process.
+    """
     try:
+        job_id = event.get("job_id")
+        if not job_id:
+            raise ValueError("Job ID is required!")
+        
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         obj = DataValidationTrainingPipeline()
         obj.initiate_data_validation()
         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
+        return {
+                'statusCode': 200,
+                'body': {
+                    'message': f"Data ingestion completed for job ID: {job_id}",
+                    'job_id': job_id
+                }
+            }
     except Exception as e:
         logger.exception(e)
-        raise e
+        return {
+            'statusCode': 500,
+            'body': str(e)
+        }
+
+if __name__ == '__main__':
+    # For local testing
+    event = {'job_id': 'test-job-id-1234'}
+    context = {}
+    lambda_handler(event, context)
+
+
+# if __name__ == '__main__':
+#     try:
+#         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
+#         obj = DataValidationTrainingPipeline()
+#         obj.initiate_data_validation()
+#         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
+#     except Exception as e:
+#         logger.exception(e)
+#         raise e

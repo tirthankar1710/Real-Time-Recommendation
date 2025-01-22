@@ -1,5 +1,5 @@
-# Dockerfile.transformation
-FROM python:3.12
+# Dockerfile.trainer
+FROM public.ecr.aws/lambda/python:3.12
 
 WORKDIR /src
 
@@ -21,4 +21,4 @@ COPY src/pipelines/model_trainer_pipeline.py /src/pipelines/
 COPY src/components/model_trainer.py /src/components/
 
 # Set the entry point for the pipeline
-CMD ["python", "pipelines/model_trainer_pipeline.py"]
+CMD ["pipelines.model_trainer_pipeline.lambda_handler"]
