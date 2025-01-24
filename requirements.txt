@@ -10,3 +10,4 @@ python-box
 pyyaml
 fastapi
 uvicorn[standard]
+boto3

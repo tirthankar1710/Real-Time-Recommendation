@@ -2,12 +2,20 @@ import pandas as pd
 
 from src import logger
 from src.entity.config_entity import DataTransformationConfig
+from src.utils.common import download_file_from_s3, upload_file_to_s3
 
 class DataTransformation:
     def __init__(self, config: DataTransformationConfig):
         self.config = config
     
     def data_transformation_flow(self):
+
+        download_file_from_s3(
+            bucket_name="ml-recommendation-capstone",
+            file_name=""
+        )
+
+
         user_df = pd.read_csv(self.config.video_games_user)
         item_df = pd.read_csv(self.config.video_games_item)
         merged_df_weight = self.prepare_merged_df(user_df=user_df, item_df=item_df)

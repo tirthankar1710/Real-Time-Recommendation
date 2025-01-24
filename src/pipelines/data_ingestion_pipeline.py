@@ -6,6 +6,8 @@ from src import logger
 from src.config.configuration import ConfigurationManager
 from src.components.data_ingestion import DataIngestion
 
+
+
 STAGE_NAME="Data Ingestion Stage"
 
 class DataIngestionTrainingPipeline:
@@ -16,7 +18,7 @@ class DataIngestionTrainingPipeline:
         """
         pass
 
-    def initiate_data_ingestion(self):
+    def initiate_data_ingestion(self, job_id):
         """
         Method to initiate the data ingestion process.
         This method creates a ConfigurationManager instance, retrieves the data ingestion configuration,
@@ -25,7 +27,7 @@ class DataIngestionTrainingPipeline:
         config = ConfigurationManager()
         data_ingestion_config = config.get_data_ingestion_config()
         data_ingestion = DataIngestion(config=data_ingestion_config)
-        data_ingestion.data_ingestion_flow()
+        data_ingestion.data_ingestion_flow(job_id=job_id)
 
 def lambda_handler(event, context):
     """
@@ -40,7 +42,7 @@ def lambda_handler(event, context):
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         obj = DataIngestionTrainingPipeline()
         #TODO: Add the job_id as a parameter
-        obj.initiate_data_ingestion()
+        obj.initiate_data_ingestion(job_id)
         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
         return {
                 'statusCode': 200,
@@ -58,7 +60,7 @@ def lambda_handler(event, context):
 
 if __name__ == '__main__':
     # For local testing
-    event = {'job_id': 'test-job-id-1234'}
+    event = {'job_id': '123438954260589'}
     context = {}
     lambda_handler(event, context)
 

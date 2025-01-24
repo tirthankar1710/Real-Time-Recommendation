@@ -17,7 +17,7 @@ class DataTransformationTrainingPipeline:
         """
         pass 
 
-    def initiate_data_transformation(self):
+    def initiate_data_transformation(self, job_id):
         """
         Method to initiate the data transformation process.
         This method creates a ConfigurationManager instance, retrieves the data transformation configuration,
@@ -54,7 +54,7 @@ def lambda_handler(event, context):
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         obj = DataTransformationTrainingPipeline()
         #TODO: Add the job_id as a parameter
-        obj.initiate_data_transformation()
+        obj.initiate_data_transformation(job_id)
         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
         return {
                 'statusCode': 200,

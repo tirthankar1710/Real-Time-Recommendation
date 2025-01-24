@@ -16,7 +16,7 @@ class DataValidationTrainingPipeline:
         """
         pass
 
-    def initiate_data_validation(self):
+    def initiate_data_validation(self,job_id):
         """
         Method to initiate the data validation process.
         This method creates a ConfigurationManager instance, retrieves the data validation configuration,
@@ -26,8 +26,12 @@ class DataValidationTrainingPipeline:
         config = ConfigurationManager()
         data_validation_config = config.get_data_validation_config()
         data_validation = DataValidation(config=data_validation_config)
-        validation_status = data_validation.validation_rules()
+        validation_status = data_validation.validation_rules(job_id)
 
+        if validation_status==False:
+            logger.error("Validation Failed!")
+            raise ValueError("validation failed")
+        
         return validation_status
 
 def lambda_handler(event, context):
@@ -42,7 +46,7 @@ def lambda_handler(event, context):
         
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         obj = DataValidationTrainingPipeline()
-        obj.initiate_data_validation()
+        obj.initiate_data_validation(job_id)
         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
         return {
                 'statusCode': 200,

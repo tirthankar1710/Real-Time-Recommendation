@@ -2,6 +2,7 @@ import pandas as pd
 
 from src import logger
 from src.entity.config_entity import DataIngestionConfig
+from src.utils.common import download_file_from_s3, upload_file_to_s3
 
 class DataIngestion:
     def __init__(self,config:DataIngestionConfig):
@@ -12,7 +13,7 @@ class DataIngestion:
         """
         self.config=config
     
-    def data_ingestion_flow(self):
+    def data_ingestion_flow(self, job_id):
         """
         Method to execute the data ingestion flow.
         This method logs the paths of the input JSONL files, retrieves user and item information,
@@ -20,12 +21,37 @@ class DataIngestion:
         """
         logger.info(f"path of jsonl file: {self.config.video_games_user}")
         logger.info(f"path of jsonl file: {self.config.video_games_item}")
-        
+
+        download_file_from_s3(
+            bucket_name="ml-recommendation-capstone",
+            file_name="meta_Video_Games.jsonl",
+            download_path=self.config.video_games_item
+        )
+        download_file_from_s3(
+            bucket_name="ml-recommendation-capstone",
+            file_name="Video_Games.jsonl",
+            download_path=self.config.video_games_user
+        )
+
         user_df = self.get_user_information()
         item_df = self.get_item_information()
 
         user_df.to_csv(self.config.user_df_output_path, index=False)
         item_df.to_csv(self.config.item_df_output_path, index=False)
+
+        upload_file_to_s3(
+            file_path=self.config.item_df_output_path,
+            bucket_name="ml-recommendation-capstone",
+            job_id=job_id,
+            folder_name='data_ingestion'
+        )
+        upload_file_to_s3(
+            file_path=self.config.user_df_output_path,
+            bucket_name="ml-recommendation-capstone",
+            job_id=job_id,
+            folder_name='data_ingestion'
+        )
+        
 
     def get_user_information(self):
         """
