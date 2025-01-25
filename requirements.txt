@@ -1,13 +1,15 @@
-streamlit==1.41.1
-seaborn==0.13.2
+# streamlit==1.41.1
+# seaborn==0.13.2
 numpy==1.26.3
-matplotlib
+pandas
+# matplotlib
 scikit-learn 
 textblob
 scikit-surprise
 ensure
 python-box
 pyyaml
-fastapi
-uvicorn[standard]
+# fastapi
+# uvicorn[standard]
 boto3
+python-dotenv
