@@ -67,14 +67,3 @@ if __name__ == '__main__':
     event = {'job_id': 'test-job-id-1234'}
     context = {}
     lambda_handler(event, context)
-
-
-# if __name__ == '__main__':
-#     try:
-#         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
-#         obj = DataValidationTrainingPipeline()
-#         obj.initiate_data_validation()
-#         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
-#     except Exception as e:
-#         logger.exception(e)
-#         raise e

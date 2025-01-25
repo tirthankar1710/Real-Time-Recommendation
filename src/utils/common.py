@@ -84,8 +84,7 @@ def download_file_from_s3(bucket_name:str, file_name:str, download_path:str, job
     try:
         # object_key = 
         # Download the file from S3
-        logger.info("try block has entered")
-        logger.info(f"{object_key}")
+        logger.info(f"starting to download: {object_key}")
         s3_client.download_file(bucket_name, object_key, f"{download_path}")
         logger.info(f"File {file_name} downloaded from s3://{bucket_name}/{object_key} to {download_path}")
 
@@ -116,9 +115,10 @@ def upload_file_to_s3(file_path, bucket_name, job_id, folder_name):
     object_key = f"{job_id}/{folder_name}/{os.path.basename(file_path)}"
 
     try:
+        logger.info(f"starting to upload: {object_key}")
         # Upload the file to S3
         s3_client.upload_file(file_path, bucket_name, object_key)
-        print(f"File {file_path} uploaded to s3://{bucket_name}/{object_key}")
+        logger.info(f"File {file_path} uploaded to s3://{bucket_name}/{object_key}")
 
         # Return the S3 object URL
         s3_url = f"https://{bucket_name}.s3.amazonaws.com/{object_key}"

@@ -8,6 +8,7 @@ from surprise import dump
 
 from src import logger
 from src.entity.config_entity import ModelTrainerConfig
+from src.utils.common import download_file_from_s3, upload_file_to_s3
 
 from sklearn.preprocessing import LabelEncoder
 
@@ -16,7 +17,16 @@ class ModelTrainer:
     def __init__(self, config: ModelTrainerConfig):
         self.config = config
     
-    def model_trainer_flow(self):
+    def model_trainer_flow(self, job_id):
+        
+        download_file_from_s3(
+            bucket_name="ml-recommendation-capstone",
+            job_id=job_id,
+            folder_name="data_transformation",
+            file_name="merged_data_weight.csv",
+            download_path=self.config.input_data
+        )
+        
         merged_df_weight = pd.read_csv(self.config.input_data)
         
         # Initialize LabelEncoder
@@ -28,7 +38,32 @@ class ModelTrainer:
         self.get_cosine_similarity(df=merged_df_weight)
         self.get_svd_model(df=merged_df_weight)
 
-    
+        upload_file_to_s3(
+            file_path=self.config.content_df_path,
+            bucket_name="ml-recommendation-capstone",
+            job_id=job_id,
+            folder_name="model_trainer"
+        )
+        upload_file_to_s3(
+            file_path=f'{self.config.root_dir}/{self.config.indices_name}',
+            bucket_name="ml-recommendation-capstone",
+            job_id=job_id,
+            folder_name="model_trainer"
+        )
+        upload_file_to_s3(
+            file_path=f'{self.config.root_dir}/{self.config.cosine_sim}',
+            bucket_name="ml-recommendation-capstone",
+            job_id=job_id,
+            folder_name="model_trainer"
+        )
+        upload_file_to_s3(
+            file_path=self.config.model_path,
+            bucket_name="ml-recommendation-capstone",
+            job_id=job_id,
+            folder_name="model_trainer"
+        )
+
+
     def get_cosine_similarity(self, df):
         selected_columns = ['user_id','parent_asin','main_category','title_y','features','description']
         content_df = df[selected_columns]
@@ -57,6 +92,8 @@ class ModelTrainer:
         indices.to_pickle(f'{self.config.root_dir}/{self.config.indices_name}')
         np.save(f'{self.config.root_dir}/{self.config.cosine_sim}', cosine_sim)
         content_df.to_csv(self.config.content_df_path, index=False)
+
+        # return indices, cosine_sim, content_df
 
         logger.info("Content Filterting Files saved successfully after training.")
     
