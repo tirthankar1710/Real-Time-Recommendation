@@ -14,7 +14,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the entire `src` directory and other necessary files
-COPY main.py main.py
+COPY main.py /main.py
 COPY config/config.yaml /config/config.yaml 
 COPY params.yaml /params.yaml
 COPY schema.yaml /schema.yaml
