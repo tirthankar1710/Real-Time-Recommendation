@@ -3,7 +3,7 @@ from src import logger
 from src.pipelines.data_ingestion_pipeline import DataIngestionTrainingPipeline
 from src.pipelines.data_validation_pipeline import DataValidationTrainingPipeline
 from src.pipelines.data_transformation_pipeline import DataTransformationTrainingPipeline
-from src.pipelines.model_trainer_pipeline import ModelTrainerTrainingPipeline
+# from src.pipelines.model_trainer_pipeline import ModelTrainerTrainingPipeline
 
 def run_stage(stage_name, job_id):
     if stage_name == "ingestion_stage":
@@ -36,15 +36,15 @@ def run_stage(stage_name, job_id):
             logger.exception(e)
             raise e
 
-    elif stage_name == "training_stage":
-        try:
-            logger.info(f">>>>>> stage: {stage_name} started <<<<<<") 
-            model_trainer = ModelTrainerTrainingPipeline()
-            model_trainer.initiate_model_training(job_id=job_id)
-            logger.info(f">>>>>> stage: {stage_name} completed <<<<<<\n\nx==========x")
-        except Exception as e:
-            logger.exception(e)
-            raise e
+    # elif stage_name == "training_stage":
+    #     try:
+    #         logger.info(f">>>>>> stage: {stage_name} started <<<<<<") 
+    #         model_trainer = ModelTrainerTrainingPipeline()
+    #         model_trainer.initiate_model_training(job_id=job_id)
+    #         logger.info(f">>>>>> stage: {stage_name} completed <<<<<<\n\nx==========x")
+    #     except Exception as e:
+    #         logger.exception(e)
+    #         raise e
 
 def lambda_handler(event, context):
     """
