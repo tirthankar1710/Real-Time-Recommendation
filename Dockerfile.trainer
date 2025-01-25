@@ -28,4 +28,4 @@ COPY src/pipelines/model_trainer_pipeline.py /src/pipelines/model_trainer_pipeli
 COPY src/components/model_trainer.py /src/components/model_trainer.py
 
 # Set the entry point for the pipeline
-CMD ["pipelines.model_trainer_pipeline.lambda_handler"]
+CMD ["src.pipelines.model_trainer_pipeline.lambda_handler"]

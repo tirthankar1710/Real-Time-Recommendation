@@ -28,4 +28,4 @@ COPY src/pipelines/data_validation_pipeline.py /src/pipelines/data_validation_pi
 COPY src/components/data_validation.py /src/components/data_validation.py
 
 # Set the entry point for the pipeline
-CMD ["pipelines.data_validation_pipeline.lambda_handler"]
+CMD ["src.pipelines.data_validation_pipeline.lambda_handler"]

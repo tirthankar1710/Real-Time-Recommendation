@@ -28,4 +28,4 @@ COPY src/pipelines/data_transformation_pipeline.py /src/pipelines/data_transform
 COPY src/components/data_transformation.py /src/components/data_transformation.py
 
 # Set the entry point for the pipeline
-CMD ["pipelines.data_transformation_pipeline.lambda_handler"]
+CMD ["src.pipelines.data_transformation_pipeline.lambda_handler"]
