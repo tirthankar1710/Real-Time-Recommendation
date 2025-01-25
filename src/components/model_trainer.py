@@ -2,6 +2,18 @@ import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+
+import os
+from surprise.builtin_datasets import get_dataset_dir
+from os.path import join
+
+# Monkey-patch the get_dataset_dir function
+def custom_get_dataset_dir():
+    return join('/tmp', '.surprise_data')  # Use /tmp for datasets in AWS Lambda
+
+# Override the original function
+get_dataset_dir.__code__ = custom_get_dataset_dir.__code__
+
 from surprise import Reader, Dataset, SVD, accuracy
 from surprise.model_selection import cross_validate, train_test_split, GridSearchCV
 from surprise import dump
