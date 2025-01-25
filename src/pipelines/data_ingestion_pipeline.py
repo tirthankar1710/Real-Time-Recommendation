@@ -1,7 +1,7 @@
 import sys
 import os
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))) # For local
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) # For Lambda
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))) # For local
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) # For Lambda
 
 from src import logger
 from src.config.configuration import ConfigurationManager
