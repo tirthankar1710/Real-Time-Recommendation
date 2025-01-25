@@ -14,11 +14,11 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the entire `src` directory and other necessary files
-COPY main.py tmp/main.py
-COPY config/config.yaml tmp/config/config.yaml 
-COPY params.yaml tmp/params.yaml
-COPY schema.yaml tmp/schema.yaml
-COPY src/ tmp/src/
+COPY main.py /tmp/main.py
+COPY config/config.yaml /tmp/config/config.yaml 
+COPY params.yaml /tmp/params.yaml
+COPY schema.yaml /tmp/schema.yaml
+COPY src/ /tmp/src/
 
 # Set the entry point for the Lambda function
 # CMD ["src.pipelines.data_ingestion_pipeline.lambda_handler"]
