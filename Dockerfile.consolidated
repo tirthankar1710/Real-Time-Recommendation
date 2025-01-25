@@ -22,4 +22,4 @@ COPY src/ tmp/src/
 
 # Set the entry point for the Lambda function
 # CMD ["src.pipelines.data_ingestion_pipeline.lambda_handler"]
-CMD ["main.lambda_handler"] 
+CMD ["tmp.main.lambda_handler"] 
