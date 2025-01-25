@@ -16,7 +16,7 @@ class ModelTrainerTrainingPipeline:
         """
         pass
 
-    def initiate_model_training(self):
+    def initiate_model_training(self, job_id):
         """
         Method to initiate the model training process.
         This method creates a ConfigurationManager instance, retrieves the model trainer configuration,
@@ -25,7 +25,7 @@ class ModelTrainerTrainingPipeline:
         config = ConfigurationManager()
         model_trainer_config = config.get_model_trainer_config()
         model_trainer = ModelTrainer(config=model_trainer_config)
-        model_trainer.model_trainer_flow()
+        model_trainer.model_trainer_flow(job_id)
 
 
 def lambda_handler(event, context):
@@ -40,7 +40,7 @@ def lambda_handler(event, context):
 
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         obj = ModelTrainerTrainingPipeline()
-        obj.initiate_model_training()
+        obj.initiate_model_training(job_id)
         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
         return {
                 'statusCode': 200,
@@ -58,16 +58,6 @@ def lambda_handler(event, context):
 
 if __name__ == '__main__':
     # For local testing
-    event = {'job_id': 'test-job-id-1234'}
+    event = {'job_id': 'e8ef154b-e333-46cf-b95f-6cc7343b34b9'}
     context = {}
     lambda_handler(event, context)
-
-# if __name__ == '__main__':
-#     try:
-#         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
-#         obj = ModelTrainerTrainingPipeline()
-#         obj.initiate_data_transformation()
-#         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
-#     except Exception as e:
-#         logger.exception(e)
-#         raise e

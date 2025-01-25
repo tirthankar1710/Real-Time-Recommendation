@@ -2,13 +2,25 @@ from src import logger
 import json
 import pandas as pd
 from src.entity.config_entity import DataValidationConfig
+from src.utils.common import download_file_from_s3, upload_file_to_s3
+
 
 class DataValidation:
     def __init__(self, config: DataValidationConfig):
         self.config = config
 
-    def validation_rules(self):
+    def validation_rules(self, job_id):
         try:
+            download_file_from_s3(
+                bucket_name="ml-recommendation-capstone",
+                file_name="validation_meta_Video_Games.jsonl",
+                download_path=self.config.video_games_item
+            )
+            download_file_from_s3(
+                bucket_name="ml-recommendation-capstone",
+                file_name="validation_Video_Games.jsonl",
+                download_path=self.config.video_games_user
+            )
             validation_status = None
             item_status = False
             user_status = False
@@ -33,14 +45,20 @@ class DataValidation:
             else:
                 validation_status = False
             validation = {"validation": validation_status}
-            save_file_path = self.config.output
             
+            save_file_path = self.config.output
             with open(save_file_path, "w") as file:
                 json.dump(validation, file, indent=4)
             
+            upload_file_to_s3(
+                file_path=self.config.output,
+                bucket_name="ml-recommendation-capstone",
+                job_id=job_id,
+                folder_name="data_validation"
+            )
+            
             logger.info(f"Length of the user df columns: {user_column_length}")
             logger.info(f"Length of the item df columns: {item_column_length}")
-
             logger.info(f"Validation Status: {validation_status}")
 
             

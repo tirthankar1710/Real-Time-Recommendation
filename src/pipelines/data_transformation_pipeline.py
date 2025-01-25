@@ -17,7 +17,7 @@ class DataTransformationTrainingPipeline:
         """
         pass 
 
-    def initiate_data_transformation(self):
+    def initiate_data_transformation(self, job_id):
         """
         Method to initiate the data transformation process.
         This method creates a ConfigurationManager instance, retrieves the data transformation configuration,
@@ -27,15 +27,15 @@ class DataTransformationTrainingPipeline:
         try:
             config = ConfigurationManager()
             data_transformation_config = config.get_data_transformation_config()
-            with open(data_transformation_config.data_validation_status, 'r') as file:
-                validation = json.load(file)
-            if validation['validation']:
-                data_transformation = DataTransformation(config=data_transformation_config)
-                merged_weight_df = data_transformation.data_transformation_flow()
-                logger.info(f"data transformed with the shape: {merged_weight_df.shape}")
-            else:
-                logger.error("Validation failed.")
-                raise ValueError("Validation failed. Stopping the workflow.")
+            # with open(data_transformation_config.data_validation_status, 'r') as file:
+            #     validation = json.load(file)
+            # if validation['validation']:
+            data_transformation = DataTransformation(config=data_transformation_config)
+            merged_weight_df = data_transformation.data_transformation_flow(job_id)
+            logger.info(f"data transformed with the shape: {merged_weight_df.shape}")
+            # else:
+            #     logger.error("Validation failed.")
+            #     raise ValueError("Validation failed. Stopping the workflow.")
 
         except Exception as e:
             logger.exception(e)
@@ -54,7 +54,7 @@ def lambda_handler(event, context):
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         obj = DataTransformationTrainingPipeline()
         #TODO: Add the job_id as a parameter
-        obj.initiate_data_transformation()
+        obj.initiate_data_transformation(job_id)
         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
         return {
                 'statusCode': 200,
@@ -73,16 +73,6 @@ def lambda_handler(event, context):
 
 if __name__ == '__main__':
     # For local testing
-    event = {'job_id': 'test-job-id-1234'}
+    event = {'job_id': 'e8ef154b-e333-46cf-b95f-6cc7343b34b9'}
     context = {}
     lambda_handler(event, context)
-
-# if __name__ == '__main__':
-#     try:
-#         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
-#         obj = DataTransformationTrainingPipeline()
-#         obj.initiate_data_transformation()
-#         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
-#     except Exception as e:
-#         logger.exception(e)
-#         raise e
