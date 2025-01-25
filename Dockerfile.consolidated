@@ -5,7 +5,7 @@ FROM public.ecr.aws/lambda/python:3.12
 RUN dnf install -y gcc gcc-c++ python3-devel
 
 # Set the working directory inside the container
-WORKDIR /tmp
+# WORKDIR /tmp
 
 # Copy the requirements file
 COPY requirements.txt .
@@ -14,11 +14,11 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the entire `src` directory and other necessary files
-COPY main.py /tmp/main.py
-COPY config/config.yaml /tmp/config/config.yaml 
-COPY params.yaml /tmp/params.yaml
-COPY schema.yaml /tmp/schema.yaml
-COPY src/ /tmp/src/
+COPY main.py main.py
+COPY config/config.yaml /config/config.yaml 
+COPY params.yaml /params.yaml
+COPY schema.yaml /schema.yaml
+COPY src/ /src/
 
 # Set the entry point for the Lambda function
 # CMD ["src.pipelines.data_ingestion_pipeline.lambda_handler"]
