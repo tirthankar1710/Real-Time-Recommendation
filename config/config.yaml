@@ -1,36 +1,36 @@
-artifacts_root: artifacts
+artifacts_root: tmp/artifacts
 
 data_ingestion:
-  root_dir: artifacts/data_ingestion
-  video_games_item: artifacts/data_ingestion/meta_Video_Games.jsonl
-  video_games_user: artifacts/data_ingestion/Video_Games.jsonl
+  root_dir: tmp/artifacts/data_ingestion
+  video_games_item: tmp/artifacts/data_ingestion/meta_Video_Games.jsonl
+  video_games_user: tmp/artifacts/data_ingestion/Video_Games.jsonl
   user_df_number: 2000
-  user_df_output_path: artifacts/data_ingestion/user_df.csv
-  item_df_output_path: artifacts/data_ingestion/item_df.csv
+  user_df_output_path: tmp/artifacts/data_ingestion/user_df.csv
+  item_df_output_path: tmp/artifacts/data_ingestion/item_df.csv
 
 data_validation:
-  root_dir: artifacts/data_validation
-  video_games_item: artifacts/data_ingestion/validation_meta_Video_Games.jsonl
-  video_games_user: artifacts/data_ingestion/validation_Video_Games.jsonl
-  output: artifacts/data_validation/status.json
+  root_dir: tmp/artifacts/data_validation
+  video_games_item: tmp/artifacts/data_ingestion/validation_meta_Video_Games.jsonl
+  video_games_user: tmp/artifacts/data_ingestion/validation_Video_Games.jsonl
+  output: tmp/artifacts/data_validation/status.json
 
 data_transformation:
-  root_dir: artifacts/data_transformation
-  video_games_item: artifacts/data_ingestion/item_df.csv
-  video_games_user: artifacts/data_ingestion/user_df.csv
-  data_validation_status: artifacts/data_validation/status.json
-  output_path_df: artifacts/data_transformation/merged_data_weight.csv
+  root_dir: tmp/artifacts/data_transformation
+  video_games_item: tmp/artifacts/data_ingestion/item_df.csv
+  video_games_user: tmp/artifacts/data_ingestion/user_df.csv
+  data_validation_status: tmp/artifacts/data_validation/status.json
+  output_path_df: tmp/artifacts/data_transformation/merged_data_weight.csv
 
 model_trainer:
-  root_dir: artifacts/model_trainer
-  input_data: artifacts/data_transformation/merged_data_weight.csv
-  model_path: artifacts/model_trainer/colab_filter_model.pkl
+  root_dir: tmp/artifacts/model_trainer
+  input_data: tmp/artifacts/data_transformation/merged_data_weight.csv
+  model_path: tmp/artifacts/model_trainer/colab_filter_model.pkl
   cosine_sim: cosine_scores.npy
   indices_name: indices.pkl
-  content_df_path: artifacts/model_trainer/content_df.csv
+  content_df_path: tmp/artifacts/model_trainer/content_df.csv
 
 prediction:
-  colab_model_path: artifacts/model_trainer/colab_filter_model.pkl
-  cosine_sim_path: artifacts/model_trainer/cosine_scores.npy
-  indices_path: artifacts/model_trainer/indices.pkl
-  content_df_path: artifacts/model_trainer/content_df.csv
+  colab_model_path: tmp/artifacts/model_trainer/colab_filter_model.pkl
+  cosine_sim_path: tmp/artifacts/model_trainer/cosine_scores.npy
+  indices_path: tmp/artifacts/model_trainer/indices.pkl
+  content_df_path: tmp/artifacts/model_trainer/content_df.csv
