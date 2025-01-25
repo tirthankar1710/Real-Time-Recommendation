@@ -88,6 +88,6 @@ def lambda_handler(event, context):
 
 if __name__ == '__main__':
     # For local testing
-    event = {'stage': 'ingestion_stage', 'job_id': 'test-job-id'}
+    event = {'stage': 'validation_stage', 'job_id': 'test-job-id-from-local'}
     context = {}
     print(lambda_handler(event, context))
