@@ -1,7 +1,7 @@
 # Dockerfile.trainer
 FROM public.ecr.aws/lambda/python:3.12
 
-WORKDIR /src
+# WORKDIR /src
 
 # Install GCC and required build tools
 RUN dnf install -y gcc gcc-c++ python3-devel
@@ -13,6 +13,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy shared modules
+COPY config/config.yaml config/config.yaml 
+COPY params.yaml params.yaml
+COPY schema.yaml schema.yaml
+COPY src/__init__.py src/__init__.py
 COPY src/config /src/config
 COPY src/constants /src/constants
 COPY src/utils /src/utils
@@ -20,8 +24,8 @@ COPY src/static /src/static
 COPY src/entity /src/entity
 
 # Copy pipeline and its required component
-COPY src/pipelines/model_trainer_pipeline.py /src/pipelines/
-COPY src/components/model_trainer.py /src/components/
+COPY src/pipelines/model_trainer_pipeline.py /src/pipelines/model_trainer_pipeline.py
+COPY src/components/model_trainer.py /src/components/model_trainer.py
 
 # Set the entry point for the pipeline
 CMD ["pipelines.model_trainer_pipeline.lambda_handler"]
