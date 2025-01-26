@@ -9,13 +9,13 @@ data_ingestion:
   item_df_output_path: opt/ml/processing/artifacts/data_ingestion/item_df.csv
 
 data_validation:
-  root_dir: opt/ml/processing/artifacts//data_validation
+  root_dir: opt/ml/processing/artifacts/data_validation
   video_games_item: opt/ml/processing/artifacts/data_ingestion/validation_meta_Video_Games.jsonl
   video_games_user: opt/ml/processing/artifacts/data_ingestion/validation_Video_Games.jsonl
-  output: opt/ml/processing/artifacts//data_validation/status.json
+  output: opt/ml/processing/artifacts/data_validation/status.json
 
 data_transformation:
-  root_dir: opt/ml/processing/artifacts//data_transformation
+  root_dir: opt/ml/processing/artifacts/data_transformation
   video_games_item: opt/ml/processing/artifacts/data_ingestion/item_df.csv
   video_games_user: opt/ml/processing/artifacts/data_ingestion/user_df.csv
   data_validation_status: opt/ml/processing/artifacts/data_validation/status.json
