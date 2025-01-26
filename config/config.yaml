@@ -16,14 +16,14 @@ data_validation:
 
 data_transformation:
   root_dir: opt/ml/processing/artifacts/data_transformation
-  video_games_item: opt/ml/processing/artifacts/data_ingestion/item_df.csv
-  video_games_user: opt/ml/processing/artifacts/data_ingestion/user_df.csv
-  data_validation_status: opt/ml/processing/artifacts/data_validation/status.json
+  video_games_item: opt/ml/processing/artifacts/data_transformation/item_df.csv
+  video_games_user: opt/ml/processing/artifacts/data_transformation/user_df.csv
+  data_validation_status: opt/ml/processing/artifacts/data_transformation/status.json
   output_path_df: opt/ml/processing/artifacts/data_transformation/merged_data_weight.csv
 
 model_trainer:
   root_dir: opt/ml/processing/artifacts/model_trainer
-  input_data: opt/ml/processing/artifacts/data_transformation/merged_data_weight.csv
+  input_data: opt/ml/processing/artifacts/model_trainer/merged_data_weight.csv
   model_path: opt/ml/processing/artifacts/model_trainer/colab_filter_model.pkl
   cosine_sim: cosine_scores.npy
   indices_name: indices.pkl
