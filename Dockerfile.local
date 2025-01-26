@@ -13,11 +13,11 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy shared modules
-COPY main.py main.py
+COPY sagemaker_main.py sagemaker_main.py
 COPY config/config.yaml config/config.yaml 
 COPY params.yaml params.yaml
 COPY schema.yaml schema.yaml
 COPY src/ src/
 
 # Set the entry point for the pipeline
-CMD ["python", "main.py"]
+CMD ["python", "sagemaker_main.py"]
