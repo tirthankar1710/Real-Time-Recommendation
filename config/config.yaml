@@ -10,8 +10,8 @@ data_ingestion:
 
 data_validation:
   root_dir: opt/ml/processing/artifacts/data_validation
-  video_games_item: opt/ml/processing/artifacts/data_ingestion/validation_meta_Video_Games.jsonl
-  video_games_user: opt/ml/processing/artifacts/data_ingestion/validation_Video_Games.jsonl
+  video_games_item: opt/ml/processing/artifacts/data_validation/validation_meta_Video_Games.jsonl
+  video_games_user: opt/ml/processing/artifacts/data_validation/validation_Video_Games.jsonl
   output: opt/ml/processing/artifacts/data_validation/status.json
 
 data_transformation:
