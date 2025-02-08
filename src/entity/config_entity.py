@@ -34,6 +34,7 @@ class ModelTrainerConfig:
     cosine_sim: str
     indices_name: str
     content_df_path: Path
+    user_feedback_path: Path
 
 @dataclass
 class PredictionConfig:

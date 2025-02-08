@@ -81,10 +81,7 @@ def run_stage(stage_name, job_id):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage_name", type=str, required=True, help="Name of the processing stage")
-    # parser.add_argument("--input_data", type=str, required=True, help="S3 URI for input data")
-    # parser.add_argument("--output_data", type=str, required=True, help="S3 URI for output data")
     parser.add_argument("--job_id", type=str, required=True, help="Job ID for tracking purposes")
-    # Add other optional arguments as needed
     args = parser.parse_args()
     stage_name = args.stage_name
     job_id = args.job_id

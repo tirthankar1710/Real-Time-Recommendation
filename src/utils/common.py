@@ -1,5 +1,7 @@
 from ensure import ensure_annotations
 import os
+import pandas as pd
+import numpy as np
 from pathlib import Path
 from box import ConfigBox
 from box.exceptions import BoxValueError
@@ -126,3 +128,70 @@ def upload_file_to_s3(file_path, bucket_name, job_id, folder_name):
     except Exception as e:
         print(f"Error uploading file: {e}")
         raise
+
+def download_s3_folder(bucket_name, folder_prefix, local_dir):
+    """
+    Downloads only JSON files from a specific folder in an S3 bucket to a local directory.
+
+    :param bucket_name: Name of the S3 bucket
+    :param folder_prefix: Path of the folder (prefix) in S3, e.g., 'my-folder/'
+    :param local_dir: Local directory to save downloaded files
+    """
+    s3_client = boto3.client('s3')
+
+    # Ensure the prefix ends with '/' to list a "folder"
+    if not folder_prefix.endswith('/'):
+        folder_prefix += '/'
+
+    paginator = s3_client.get_paginator('list_objects_v2')
+    pages = paginator.paginate(Bucket=bucket_name, Prefix=folder_prefix)
+
+    # Create local directory if it doesn't exist
+    os.makedirs(local_dir, exist_ok=True)
+
+    for page in pages:
+        if 'Contents' in page:
+            for obj in page['Contents']:
+                s3_key = obj['Key']  # Full path in S3
+                if "json" in s3_key:
+                    file_name = s3_key[len(folder_prefix):]  # Extract relative file path
+                    print(f"file_name: {s3_key}")
+                    local_file_path = os.path.join(local_dir, file_name)
+                    print(local_file_path)
+
+                    # Ensure subdirectories are created
+                    os.makedirs(os.path.dirname(local_file_path), exist_ok=True)
+
+                    print(f"Downloading {s3_key} to {local_file_path}...")
+                    s3_client.download_file(bucket_name, s3_key, local_file_path)
+
+    logger.info("User feedback downloaded!!")
+
+def read_json_files_to_dataframe(folder_path):
+    """
+    Reads all JSON files in a folder and converts them to a single DataFrame.
+
+    Args:
+        folder_path (str): The path to the folder containing JSON files.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing the data from all JSON files.
+    """
+    # List all JSON files in the folder
+    json_files = [f for f in os.listdir(folder_path) if f.endswith('.json')]
+
+
+    # Read each JSON file into a DataFrame and append to the list
+    json_list = []
+    for json_file in json_files:
+        file_path = os.path.join(folder_path, json_file)
+        json_df = pd.read_json(file_path)
+        json_list.append(json_df)
+    # Concatenate all DataFrames into a single DataFrame
+    combined_df = pd.concat(json_list, ignore_index=True)
+    combined_df = combined_df.astype(np.int64)
+    combined_df = combined_df.rename(
+        columns={"product_id": "parent_asin",
+            "feedback": "rating"}
+    )
+    return combined_df

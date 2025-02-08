@@ -65,7 +65,8 @@ class ConfigurationManager:
             model_path = config.model_path,
             cosine_sim = config.cosine_sim,
             indices_name = config.indices_name,
-            content_df_path = config.content_df_path
+            content_df_path = config.content_df_path,
+            user_feedback_path = config.user_feedback_path
         )
 
         return model_trainer_config

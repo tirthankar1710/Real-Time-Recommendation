@@ -34,6 +34,7 @@ class DataIngestion:
         )
 
         user_df = self.get_user_information()
+        print(f"user df shape: {user_df.shape}")
         item_df = self.get_item_information()
 
         user_df.to_csv(self.config.user_df_output_path, index=False)
@@ -79,8 +80,11 @@ class DataIngestion:
         Returns:
             pd.DataFrame: DataFrame containing item information.
         """
+        # chunk_size=500
+        # item_chunks = pd.read_json(self.config.video_games_item, lines=True, chunksize=chunk_size)
+        # item_chunks_list= list(item_chunks)
         chunk_size=500
-        item_chunks = pd.read_json(self.config.video_games_item, lines=True, chunksize=chunk_size)
+        item_chunks = pd.read_json("artifacts/data_ingestion/meta_Video_Games.jsonl", lines=True, chunksize=chunk_size)
         item_chunks_list= list(item_chunks)
         # use the first x dataframes as configured in the user df number.
         item_df = pd.concat(item_chunks_list, ignore_index=True)
