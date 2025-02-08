@@ -3,16 +3,16 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-import os
-from surprise.builtin_datasets import get_dataset_dir
-from os.path import join
+# import os
+# from surprise.builtin_datasets import get_dataset_dir
+# from os.path import join
 
-# Monkey-patch the get_dataset_dir function
-def custom_get_dataset_dir():
-    return join('/tmp', '.surprise_data')  # Use /tmp for datasets in AWS Lambda
+# # Monkey-patch the get_dataset_dir function
+# def custom_get_dataset_dir():
+#     return join('/tmp', '.surprise_data')  # Use /tmp for datasets in AWS Lambda
 
-# Override the original function
-get_dataset_dir.__code__ = custom_get_dataset_dir.__code__
+# # Override the original function
+# get_dataset_dir.__code__ = custom_get_dataset_dir.__code__
 
 from surprise import Reader, Dataset, SVD, accuracy
 from surprise.model_selection import cross_validate, train_test_split, GridSearchCV
@@ -20,7 +20,7 @@ from surprise import dump
 
 from src import logger
 from src.entity.config_entity import ModelTrainerConfig
-from src.utils.common import download_file_from_s3, upload_file_to_s3
+from src.utils.common import download_file_from_s3, upload_file_to_s3, download_s3_folder, read_json_files_to_dataframe
 
 from sklearn.preprocessing import LabelEncoder
 
@@ -37,6 +37,12 @@ class ModelTrainer:
             folder_name="data_transformation",
             file_name="merged_data_weight.csv",
             download_path=self.config.input_data
+        )
+
+        download_s3_folder(
+            bucket_name="ml-recommendation-capstone",
+            folder_prefix="user-feedback",
+            local_dir=self.config.user_feedback_path
         )
         
         merged_df_weight = pd.read_csv(self.config.input_data)
@@ -111,6 +117,10 @@ class ModelTrainer:
     
     def get_svd_model(self, df):
         logger.info("Collaborative filtering starting.")
+        
+        # Loading the user feedback 
+        user_feedback_df = read_json_files_to_dataframe(self.config.user_feedback_path)
+        df = pd.concat([df,user_feedback_df], ignore_index=True)
 
         # Filtering the dataframe based with the requirement
         min_rating = 5
