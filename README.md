@@ -7,7 +7,7 @@ We have worked with the Video Games Dataset.
 
 ## Running the Main Script
 
-The `main.py` script allows you to run different stages of the data pipeline. You can specify a particular stage to run or run all stages sequentially.
+The `sagemaker_main.py` script allows you to run different stages of the data pipeline. You can specify a particular stage to run or run all stages sequentially.
 
 ### Available Stages
 - `ingestion_stage`: Runs the data ingestion pipeline.
@@ -20,4 +20,4 @@ The `main.py` script allows you to run different stages of the data pipeline. Yo
 
 To run a specific stage, use the following command:
 
-python main.py <stage_name>
+python sagemaker_main.py <stage_name>

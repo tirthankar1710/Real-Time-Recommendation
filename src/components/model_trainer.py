@@ -1,19 +1,8 @@
 import pandas as pd
 import numpy as np
-import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-# import os
-# from surprise.builtin_datasets import get_dataset_dir
-# from os.path import join
-
-# # Monkey-patch the get_dataset_dir function
-# def custom_get_dataset_dir():
-#     return join('/tmp', '.surprise_data')  # Use /tmp for datasets in AWS Lambda
-
-# # Override the original function
-# get_dataset_dir.__code__ = custom_get_dataset_dir.__code__
+from sklearn.preprocessing import LabelEncoder
 
 from surprise import Reader, Dataset, SVD, accuracy
 from surprise.model_selection import cross_validate, train_test_split, GridSearchCV
@@ -23,15 +12,31 @@ from src import logger
 from src.entity.config_entity import ModelTrainerConfig
 from src.utils.common import download_file_from_s3, upload_file_to_s3, download_s3_folder, read_json_files_to_dataframe
 
-from sklearn.preprocessing import LabelEncoder
-
 
 class ModelTrainer:
     def __init__(self, config: ModelTrainerConfig):
+        """
+        Initializes the ModelTrainer with the given configuration.
+
+        Args:
+            config (object): Configuration object containing paths and parameters.
+        """
         self.config = config
     
     def model_trainer_flow(self, job_id):
-        
+        """
+        Orchestrates the model training workflow.
+
+        Downloads data from S3, preprocesses it, trains both content-based and 
+        collaborative filtering models, and uploads the trained models and 
+        related files to S3.
+
+        Args:
+            job_id (str): The job ID used for S3 file organization.
+
+        Returns:
+            None.
+        """
         download_file_from_s3(
             bucket_name="ml-recommendation-capstone",
             job_id=job_id,
@@ -57,55 +62,40 @@ class ModelTrainer:
         self.get_cosine_similarity(df=merged_df_weight)
         self.get_svd_model(df=merged_df_weight)
 
-        final_data_json = {
-            "status": "complete"
-        }
-        with open(f"{self.config.root_dir}/final_json.json", "w") as json_file:
-            json.dump(final_data_json, json_file, indent=4)
+        final_data_text = "Training success. Creating file for S3 event trigger."
+        with open(f"{self.config.root_dir}/final_data_text.txt", "w") as file:
+            file.write(final_data_text)
 
         file_path_list = [
             self.config.content_df_path,
             f'{self.config.root_dir}/{self.config.indices_name}',
             f'{self.config.root_dir}/{self.config.cosine_sim}',
             self.config.model_path,
-            f"{self.config.root_dir}/final_json.json"
+            f"{self.config.root_dir}/final_data_text.txt"
         ]
 
         for file_path in file_path_list:
             upload_file_to_s3(
-            file_path=file_path,
-            bucket_name="ml-recommendation-capstone",
-            job_id=job_id,
-            folder_name="model_trainer"   
+                file_path=file_path,
+                bucket_name="ml-recommendation-capstone",
+                job_id=job_id,
+                folder_name="model_trainer"   
             )
 
-        # upload_file_to_s3(
-        #     file_path=self.config.content_df_path,
-        #     bucket_name="ml-recommendation-capstone",
-        #     job_id=job_id,
-        #     folder_name="model_trainer"
-        # )
-        # upload_file_to_s3(
-        #     file_path=f'{self.config.root_dir}/{self.config.indices_name}',
-        #     bucket_name="ml-recommendation-capstone",
-        #     job_id=job_id,
-        #     folder_name="model_trainer"
-        # )
-        # upload_file_to_s3(
-        #     file_path=f'{self.config.root_dir}/{self.config.cosine_sim}',
-        #     bucket_name="ml-recommendation-capstone",
-        #     job_id=job_id,
-        #     folder_name="model_trainer"
-        # )
-        # upload_file_to_s3(
-        #     file_path=self.config.model_path,
-        #     bucket_name="ml-recommendation-capstone",
-        #     job_id=job_id,
-        #     folder_name="model_trainer"
-        # )
-
-
     def get_cosine_similarity(self, df):
+        """
+        Trains a content-based filtering model using TF-IDF and cosine similarity.
+
+        Preprocesses the input DataFrame, calculates the TF-IDF matrix, computes 
+        the cosine similarity, and saves the necessary files (content dataframe, 
+        indices, and cosine similarity matrix).
+
+        Args:
+            df (pd.DataFrame): The input DataFrame containing item descriptions.
+
+        Returns:
+            None.  Saves files to paths specified in the config.
+        """
         selected_columns = ['user_id','parent_asin','main_category','title_y','features','description']
         content_df = df[selected_columns]
         # content_df['item_description'] = content_df['main_category'] + " " + content_df['title_y'] + " " + content_df['features'] + " " + content_df['description']
@@ -139,6 +129,19 @@ class ModelTrainer:
         logger.info("Content Filterting Files saved successfully after training.")
     
     def get_svd_model(self, df):
+        """
+        Trains a collaborative filtering model using SVD.
+
+        Loads user feedback data, preprocesses the data, trains an SVD model using 
+        the Surprise library, performs hyperparameter tuning using GridSearchCV, 
+        and saves the trained model.
+
+        Args:
+            df (pd.DataFrame): The input DataFrame containing user ratings.
+
+        Returns:
+            None. Saves the trained SVD model to the path specified in the config.
+        """
         logger.info("Collaborative filtering starting.")
         
         # Loading the user feedback 
