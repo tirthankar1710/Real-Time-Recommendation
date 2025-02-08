@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -56,30 +57,52 @@ class ModelTrainer:
         self.get_cosine_similarity(df=merged_df_weight)
         self.get_svd_model(df=merged_df_weight)
 
-        upload_file_to_s3(
-            file_path=self.config.content_df_path,
+        final_data_json = {
+            "status": "complete"
+        }
+        with open(f"{self.config.root_dir}/final_json.json", "w") as json_file:
+            json.dump(final_data_json, json_file, indent=4)
+
+        file_path_list = [
+            self.config.content_df_path,
+            f'{self.config.root_dir}/{self.config.indices_name}',
+            f'{self.config.root_dir}/{self.config.cosine_sim}',
+            self.config.model_path,
+            f"{self.config.root_dir}/final_json.json"
+        ]
+
+        for file_path in file_path_list:
+            upload_file_to_s3(
+            file_path=file_path,
             bucket_name="ml-recommendation-capstone",
             job_id=job_id,
-            folder_name="model_trainer"
-        )
-        upload_file_to_s3(
-            file_path=f'{self.config.root_dir}/{self.config.indices_name}',
-            bucket_name="ml-recommendation-capstone",
-            job_id=job_id,
-            folder_name="model_trainer"
-        )
-        upload_file_to_s3(
-            file_path=f'{self.config.root_dir}/{self.config.cosine_sim}',
-            bucket_name="ml-recommendation-capstone",
-            job_id=job_id,
-            folder_name="model_trainer"
-        )
-        upload_file_to_s3(
-            file_path=self.config.model_path,
-            bucket_name="ml-recommendation-capstone",
-            job_id=job_id,
-            folder_name="model_trainer"
-        )
+            folder_name="model_trainer"   
+            )
+
+        # upload_file_to_s3(
+        #     file_path=self.config.content_df_path,
+        #     bucket_name="ml-recommendation-capstone",
+        #     job_id=job_id,
+        #     folder_name="model_trainer"
+        # )
+        # upload_file_to_s3(
+        #     file_path=f'{self.config.root_dir}/{self.config.indices_name}',
+        #     bucket_name="ml-recommendation-capstone",
+        #     job_id=job_id,
+        #     folder_name="model_trainer"
+        # )
+        # upload_file_to_s3(
+        #     file_path=f'{self.config.root_dir}/{self.config.cosine_sim}',
+        #     bucket_name="ml-recommendation-capstone",
+        #     job_id=job_id,
+        #     folder_name="model_trainer"
+        # )
+        # upload_file_to_s3(
+        #     file_path=self.config.model_path,
+        #     bucket_name="ml-recommendation-capstone",
+        #     job_id=job_id,
+        #     folder_name="model_trainer"
+        # )
 
 
     def get_cosine_similarity(self, df):
