@@ -47,37 +47,6 @@ def run_stage(stage_name, job_id):
             logger.exception(e)
             raise e
 
-# def lambda_handler(event, context):
-#     """
-#     AWS Lambda handler function.
-#     Extracts the stage and job_id from the event and runs the corresponding stage.
-#     """
-#     try:
-#         stage_name = event.get("stage")
-#         job_id = event.get("job_id")
-#         if not stage_name or not job_id:
-#             raise ValueError("Both stage name and job ID are required in the event")
-
-#         run_stage(stage_name, job_id)
-#         return {
-#             'statusCode': 200,
-#             'body': {
-#                 'message': f"Stage {stage_name} completed successfully",
-#                 'stage': stage_name,
-#                 'job_id': job_id
-#             }
-#         }
-#     except Exception as e:
-#         logger.exception(e)
-#         return {
-#             'statusCode': 500,
-#             'body': {
-#                 'message': str(e),
-#                 'stage': stage_name if 'stage_name' in locals() else None,
-#                 'job_id': job_id if 'job_id' in locals() else None
-#             }
-#         }
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage_name", type=str, required=True, help="Name of the processing stage")
@@ -91,9 +60,3 @@ if __name__ == "__main__":
             run_stage(stage_name, job_id=job_id)
     else:
         run_stage(stage_name, job_id=job_id)
-
-# if __name__ == '__main__':
-#     # For local testing
-#     event = {'stage': 'validation_stage', 'job_id': 'test-job-id-from-local'}
-#     context = {}
-#     print(lambda_handler(event, context))
