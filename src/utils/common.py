@@ -93,7 +93,7 @@ def download_file_from_s3(bucket_name:str, file_name:str, download_path:str, job
         # Return the local path to the downloaded file
         return download_path
     except Exception as e:
-        print(f"Error downloading file: {e}")
+        logger.exception(f"Error downloading file: {e}")
         raise
 
 def upload_file_to_s3(file_path, bucket_name, job_id, folder_name):
@@ -126,8 +126,7 @@ def upload_file_to_s3(file_path, bucket_name, job_id, folder_name):
         s3_url = f"https://{bucket_name}.s3.amazonaws.com/{object_key}"
         return s3_url
     except Exception as e:
-        print(f"Error uploading file: {e}")
-        raise
+        logger.exception(f"Error uploading file: {e}")
 
 def download_s3_folder(bucket_name, folder_prefix, local_dir):
     """
@@ -155,14 +154,11 @@ def download_s3_folder(bucket_name, folder_prefix, local_dir):
                 s3_key = obj['Key']  # Full path in S3
                 if "json" in s3_key:
                     file_name = s3_key[len(folder_prefix):]  # Extract relative file path
-                    print(f"file_name: {s3_key}")
                     local_file_path = os.path.join(local_dir, file_name)
-                    print(local_file_path)
 
                     # Ensure subdirectories are created
                     os.makedirs(os.path.dirname(local_file_path), exist_ok=True)
 
-                    print(f"Downloading {s3_key} to {local_file_path}...")
                     s3_client.download_file(bucket_name, s3_key, local_file_path)
 
     logger.info("User feedback downloaded!!")
