@@ -50,7 +50,6 @@ class ModelTrainer:
             folder_prefix="user-feedback",
             local_dir=self.config.user_feedback_path
         )
-        
         merged_df_weight = pd.read_csv(self.config.input_data)
         
         # Initialize LabelEncoder

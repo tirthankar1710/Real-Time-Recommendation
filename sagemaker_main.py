@@ -58,5 +58,9 @@ if __name__ == "__main__":
         stages = ["ingestion_stage", "validation_stage", "transformation_stage", "training_stage"]
         for stage_name in stages:
             run_stage(stage_name, job_id=job_id)
+    elif stage_name == "skip_ingestion":
+        stages = ["validation_stage", "transformation_stage", "training_stage"]
+        for stage_name in stages:
+            run_stage(stage_name, job_id=job_id)
     else:
         run_stage(stage_name, job_id=job_id)
